@@ -1,0 +1,28 @@
+div.alert {
+    width: 100%;
+    height: auto;
+}
+
+div.alert.alert-danger {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+div.alert.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+button.alert-button {
+    background: transparent;
+    border: none;
+    float: right;
+}
+
+button.alert-button.alert-button-danger {
+    color: #a94442;
+}
+
+button.alert-button.alert-button-success {
+    color: #3c763d;
+}
