@@ -13,6 +13,10 @@ label, legend {
 }
 
 /* LAYOUT CSS */
+input {
+    color: black;
+}
+
 #layout {
     padding: 0;
 }
