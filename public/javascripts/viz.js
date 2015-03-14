@@ -1,7 +1,49 @@
+// Image info lost while collapsing tree nodes, so use this map
+// to keep track of images associated with each node and then restore
+// info when expanding tree nodes once again
+var imageMap = {};
+
 /* Focus on "word" textbox when the page is loaded. */
 $(window).load(function() {
     $("#word").focus();
 });
+
+/**
+ * For each node in the D3 Tree display, retrieve a Bing Search image that
+ * corresponds to the node's word, and display it.
+ */
+function fetchImages(responseObject)
+{
+    var resultsTrie = responseObject.root;
+    var numLevels = responseObject.numLevels;
+    var processingQueue = [resultsTrie];
+
+    // Essentially level-order traversal of SynonymsTrie
+    while (processingQueue.length > 0) {
+        var currentNode = processingQueue.shift();
+        if (currentNode === undefined) {
+            break;
+        }
+
+        $.ajax({
+            url: "/fetchImage",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({"word": currentNode.name})
+        }).done(function(imageResults) {
+            if (imageResults === "None") {
+                return;
+            }
+            var jsonResults = JSON.parse(imageResults);
+            var word = jsonResults.word;
+            var imgSrc = jsonResults.imgSrc;
+            imageMap[word] = imgSrc;
+            d3.select("#" + word).attr("xlink:href", imgSrc); 
+        });        
+
+        processingQueue = processingQueue.concat(currentNode.children); 
+    }
+}
 
 /*
  * Issue an AJAX request (cross-domain, POST) to the SynonymsCrawler API on
@@ -10,6 +52,8 @@ $(window).load(function() {
  */
 function contactSynonymsCrawlerAPI(root, degrees)
 {
+    imageMap = {}; // Clear results from previous search.
+
     $.ajax({
         url: "/crawl",
         type: "POST",
@@ -27,6 +71,7 @@ function contactSynonymsCrawlerAPI(root, degrees)
         if (errors === undefined) {
             $("#messages").append(createSuccessDialog("Crawling operation succeeded."));
             generateTreeDiagram(responseObject);
+            fetchImages(responseObject);
             return;
         }
         // Otherwise, display the errors.

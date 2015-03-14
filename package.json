@@ -5,6 +5,7 @@
     "dependencies": {
         "express": "2.5.8",
         "jade": ">= 0.0.1",
-        "blockspring": "0.0.6"
+        "blockspring": "0.0.6",
+        "node-bing-api": "1.1.0"
     }
 }

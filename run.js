@@ -28,8 +28,10 @@ app.configure('production', function(){
 
 // Routes
 
+var crawlRoutes = require("./routes/crawl");
 app.get('/', require('./routes').index);
-app.post('/crawl', require('./routes/crawl').index);
+app.post('/crawl', crawlRoutes.index);
+app.post('/fetchImage', crawlRoutes.fetchImage);
 
 var port = process.env.PORT || 5000;
 app.listen(port, function(){

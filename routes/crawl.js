@@ -1,5 +1,5 @@
 var blockspring = require("blockspring");
-var data_manager = require("./_data_manager");
+var dataManager = require("./_data_manager");
 
 /**
  * Return either an Object with the list of errors reported by Blockspring
@@ -9,7 +9,7 @@ function getResponseObject(blockspringData)
 {
     var errors = blockspringData["_errors"];
     if (errors.length === 0) {
-        return data_manager.convertToD3Format(blockspringData.params);
+        return dataManager.convertToD3Format(blockspringData.params);
     }
 
     // If there are errors, then filter out the message field of each error
@@ -49,3 +49,28 @@ exports.index = function(request, response) {
     });
 };
 
+/**
+ * Given a word, return the src of the 1st corresponding image from Bing Search API.
+ */
+exports.fetchImage = function(request, response) {
+    var API_KEY = {accKey: "yZf2L/qSloFtqxxlZwW0j01eWaeDt41ujz9NrRzu0dA"};
+    var IMAGE_FILTERS = {
+        imagefilters: 'Size:Small+Color:Monochrome',
+        top: 1,  // We just want the first image (top result) for each word.
+        adult: "Strict"
+    };
+    
+    var word = request.body.word;
+    require("node-bing-api")(API_KEY).images(word, function(error, results, body) {
+        if (body === undefined || body.d === undefined || body.d.results === undefined || body.d.results.length === 0) {
+            response.write("None");
+            response.end();
+            return;
+        }
+
+        var imgSrc = body.d.results[0].Thumbnail.MediaUrl;
+        var output = {"word": word, "imgSrc": imgSrc};
+        response.write(JSON.stringify(output));
+        response.end();
+    });
+};

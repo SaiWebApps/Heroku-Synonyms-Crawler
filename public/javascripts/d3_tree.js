@@ -3,7 +3,7 @@ function generateTreeDiagram(treeData)
     var i = 0,
         duration = 750;
 
-    var nodeDim = treeData.numLevels * 2;
+    var nodeDim = treeData.numLevels * 8;
     var tree = d3.layout.tree().nodeSize([nodeDim, nodeDim]);
 
     var diagonal = d3.svg.diagonal()
@@ -66,12 +66,22 @@ function generateTreeDiagram(treeData)
             .attr("r", 1e-6)
             .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
+        // Word displayed by this node
         nodeEnter.append("text")
-            .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+            .attr("x", function(d) { return d.children || d._children ? -20 : 20; })
             .attr("dy", ".35em")
             .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
             .text(function(d) { return d.name; })
             .style("fill-opacity", 1e-6);
+
+        // Thumbnail corresponding to this node's word
+        nodeEnter.append("image")
+            .attr("id", function(d) { return d.name; })
+            .attr("xlink:href", function(d) { return d.icon; })
+            .attr("x", "-12px")
+            .attr("y", "-12px")
+            .attr("width", "24px")
+            .attr("height", "24px");
 
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
@@ -132,12 +142,27 @@ function generateTreeDiagram(treeData)
 
     // Toggle children on click.
     function click(d) {
+        // If collapsing (hiding child nodes)
         if (d.children) {
             d._children = d.children;
             d.children = null;
-        } else {
+        } 
+        // Otherwise, if expanding (showing child nodes)
+        else {
             d.children = d._children;
             d._children = null;
+
+            // Image info lost while collapsing child nodes, so
+            // restore from imageMap
+            for (var i = 0; i < d.children.length; i++) {
+                var child = d.children[i];
+                var childName = child.name;
+                if (childName === undefined) {
+                    continue;
+                }
+                child.icon = imageMap[child.name];
+                d.children[i] = child;
+            }
         }
         update(d);
     }
