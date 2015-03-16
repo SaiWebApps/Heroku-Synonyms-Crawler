@@ -1,12 +1,40 @@
+/* Focus on "word" textbox when the page is loaded. */
+$(window).load(function() {
+    $("#word").focus();
+    updateTabs("#wordSearch", "#imageSearch");
+});
+
+function updateTabs(selectedLinkId, deselectedLinkId)
+{
+    $(selectedLinkId).css("font-weight", "bold")
+        .css("background-color", "black");
+    $(deselectedLinkId).css("font-weight", "")
+        .css("background-color", "");
+}
+
+$("#wordSearch").click(function() {
+    updateTabs("#wordSearch", "#imageSearch");
+
+    // During word search, hide image upload field and show the word field.
+    $("#word").attr("class", "");
+    $("#image").attr("class", "hidden");
+});
+
+$("#imageSearch").click(function() {
+    updateTabs("#imageSearch", "#wordSearch");
+
+    // During image search, hide the word field and show image upload field.
+    $("#word").attr("class", "hidden");
+    $("#image").attr("class", "");
+});
+
+
+/** FORM PROCESSING **/
+
 // Image info lost while collapsing tree nodes, so use this map
 // to keep track of images associated with each node and then restore
 // info when expanding tree nodes once again
 var imageMap = {};
-
-/* Focus on "word" textbox when the page is loaded. */
-$(window).load(function() {
-    $("#word").focus();
-});
 
 /**
  * For each node in the D3 Tree display, retrieve a Bing Search image that

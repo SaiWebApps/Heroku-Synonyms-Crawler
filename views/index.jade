@@ -1,8 +1,13 @@
 #layout.pure-g
       <!-- Synonyms Crawler Form -->
       #crawlerForm.sidebar.pure-u-1.pure-u-md-1-4
+        .pure-menu.pure-menu-horizontal
+            ul.pure-menu-list
+                li.pure-menu-item
+                    a#wordSearch.pure-menu-link WORD SEARCH
+                li.pure-menu-item
+                    a#imageSearch.pure-menu-link IMAGE SEARCH
         #messages
-        |                 
         form.pure-form.pure-form-stacked.header
           fieldset
             legend  Synonyms Crawler Form 
@@ -10,6 +15,7 @@
             label(for='word')  Get Synonyms For 
             |                         
             input#word(type='text', placeholder='Starting Word', required='')
+            input#image(type='file', class='hidden', required='')
             |                         
             label(for='maxDegrees')  Max Degrees of Separation 
             |                         
