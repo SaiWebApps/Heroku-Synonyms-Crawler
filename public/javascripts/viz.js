@@ -73,20 +73,13 @@ function fetchImages(responseObject)
     }
 }
 
-/*
- * Issue an AJAX request (cross-domain, POST) to the SynonymsCrawler API on
- * Blockspring, and handle the response. "root" and "degrees" will be passed
- * to the API as parameters "word" and "max_degrees_of_separation" respectively.
- */
-function contactSynonymsCrawlerAPI(root, degrees)
+function contactSynonymsCrawlerAPI(root)
 {
-    imageMap = {}; // Clear results from previous search.
-
     $.ajax({
         url: "/crawl",
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({"word": root, "max_degrees_of_separation": degrees}),
+        data: JSON.stringify({"word": root}),
     }).done(function(response) {
         /* Handle the JSON response from the Synonyms Crawler API. */
         var responseObject = JSON.parse(response);
@@ -119,17 +112,15 @@ function submitForm()
     $("#messages").empty(); // Clear previous messages.
 
     var word = $("#word").val().trim();
-    var maxDegrees = parseInt($("#maxDegrees").val());
-    contactSynonymsCrawlerAPI(word, maxDegrees);
+    contactSynonymsCrawlerAPI(word);
     createProgressBar();
     $("#word").val(""); // Clear "word" field.
-    $("#maxDegrees").val(0); // Reset "maxDegrees" field to 0.
 }
 
 // Submit form on button click.
 $("#submitButton").click(submitForm);
-// Or submit form when "enter" key is pressed on the "word" or "maxDegrees" fields.
-$("#word, #maxDegrees").keyup(function(event) {
+// Or submit form when "enter" key is pressed on the "word" field.
+$("#word").keyup(function(event) {
     if (event.keyCode != 13) {
         return;
     }
