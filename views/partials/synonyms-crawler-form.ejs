@@ -1,0 +1,23 @@
+<div id="layout" class="pure-g">
+  
+  <div id="crawlerForm" class="sidebar pure-u-1 pure-u-md-1-4">
+    <!-- Status messages (e.g., errors) --> 
+    <div id="messages"></div>
+
+    <!-- Actual SynonymsCrawler Form -->
+    <form class="pure-form pure-form-stacked header">
+      <fieldset>
+        <legend> Synonyms Crawler Form </legend>
+
+        <label for="word"> Get Synonyms For </label>
+        <input id="word" type="text" placeholder="Starting Word" required />
+
+        <input id="submitButton" type="button" value="submit" class="pure-button"/>
+      </fieldset>
+    </form>
+  </div>
+
+  <!-- Area to display results in D3.js tree -->
+  <div id="resultsArea" class="content pure-u-1 pure-u-md-3-4"></div>
+
+</div>

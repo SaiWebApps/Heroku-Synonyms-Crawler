@@ -34,4 +34,3 @@ function createProgressBar()
     resultsArea.append("<h1>Loading....</h1>");
     return resultsArea;
 }
-

@@ -1,12 +1,23 @@
 {
-    "name": "application-name",
-    "version": "0.0.1",
-    "private": true,
+    "name": "Heroku-Synonyms-Crawler",
+    "description": "Display an interactive N-level tree of synonyms for a given word.",
+    "version": "1.0.0",
+    "author": "Sairam Krishnan",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
     "dependencies": {
-        "express": "2.5.8",
-        "jade": ">= 0.0.1",
+        "async": "*",
+        "body-parser": "*",
+        "express": "4.13.3",
+        "ejs": "2.4.1",
         "blockspring": "0.0.6",
-        "node-bing-api": "1.1.0",
-        "mongodb": "2.0.14"
-    }
+        "images-scraper": "2.0.10"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SaiWebApps/Heroku-Synonyms-Crawler"
+    },
+    "license": "MIT"
 }
